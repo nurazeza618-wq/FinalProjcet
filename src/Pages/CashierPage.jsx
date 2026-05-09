@@ -3,10 +3,13 @@ import background from "../assets/background.png";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
 
   /*
+    =========================
+    LOGIN ROLE
+    =========================
+
     ADMIN
     Email    : nurazeza618@gmail.com
     Password : 123
@@ -18,34 +21,37 @@ const LoginPage = () => {
 
   // HANDLE LOGIN
   const handleLogin = (email, password) => {
-
+    // =========================
     // LOGIN ADMIN
+    // =========================
     if (
-      email.trim().toLowerCase() === "nurazeza618@gmail.com" &&
-      password.trim() === "123"
+      email === "nurazeza618@gmail.com" &&
+      password === "123"
     ) {
-
       localStorage.setItem("role", "admin");
 
-      navigate("/dashboard");
+      // ADMIN → masuk halaman admin
+      navigate("/tambah-menu");
     }
 
+    // =========================
     // LOGIN CASHIER
+    // =========================
     else if (
-      email.trim().toLowerCase() === "cashier@gmail.com" &&
-      password.trim() === "123"
+      email === "cashier@gmail.com" &&
+      password === "123"
     ) {
-
       localStorage.setItem("role", "cashier");
 
+      // CASHIER → langsung masuk halaman cashier
       navigate("/cashier");
     }
 
+    // =========================
     // LOGIN GAGAL
+    // =========================
     else {
-
       alert("Email atau Password salah!");
-
     }
   };
 
@@ -65,10 +71,8 @@ const LoginPage = () => {
         paddingLeft: "120px",
       }}
     >
-
-      {/* LOGIN FORM */}
+      {/* kirim function login ke LoginForm */}
       <LoginForm onLogin={handleLogin} />
-
     </div>
   );
 };

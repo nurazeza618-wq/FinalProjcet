@@ -1,84 +1,77 @@
-import { Search } from "lucide-react";
-import { useState, useEffect } from "react";
-import defaultProfile from "../assets/foto-profil.png"; // ✅ ambil dari assets
+import { LogOut, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import profile from "../assets/foto-profil.png"; // ⚠️ sesuaikan dengan file kamu
 
 const TopBar = () => {
-  const [profile, setProfile] = useState(defaultProfile); // ✅ default langsung dari assets
+  const navigate = useNavigate();
 
-  // Ambil dari localStorage saat pertama load
-  useEffect(() => {
-    const savedImage = localStorage.getItem("profileImage");
-    if (savedImage) {
-      setProfile(savedImage);
-    }
-  }, []);
+  // HANDLE LOGOUT
+  const handleLogout = () => {
+    const confirmLogout = window.confirm(
+      "Apakah Anda yakin ingin logout?"
+    );
 
-  // Handle upload gambar
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+    if (confirmLogout) {
+      // hapus data login jika ada
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
 
-    reader.onloadend = () => {
-      localStorage.setItem("profileImage", reader.result);
-      setProfile(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
+      // kembali ke halaman login
+      navigate("/");
     }
   };
 
   return (
-    <div className="w-full bg-white h-[70px] flex items-center justify-between px-6 shadow-sm">
+    <div className="flex justify-between items-center bg-white px-6 py-3 shadow-sm">
 
-      {/* LEFT */}
-      <div className="flex items-center gap-4 w-full max-w-xl">
+      {/* SEARCH */}
+      <div className="relative w-[400px]">
+        <input
+          type="text"
+          placeholder="Enter the keyword here..."
+          className="w-full pl-10 pr-4 py-2 border rounded-full text-sm outline-none"
+        />
 
-        {/* Logo */}
-        <div className="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full font-bold">
-          P
-        </div>
-
-        {/* SEARCH BAR */}
-        <div className="relative w-full">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-
-          <input
-            type="text"
-            placeholder="Enter the keyword here..."
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+        <Search
+          size={16}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+        />
       </div>
 
-      {/* RIGHT PROFILE */}
+      {/* RIGHT */}
       <div className="flex items-center gap-4">
 
-        <button className="text-gray-600 text-sm hover:text-blue-500">
+        {/* TEXT */}
+        <p className="text-sm text-gray-500">
           Order Archive
-        </button>
+        </p>
 
-        {/* FOTO PROFIL */}
-        <label className="cursor-pointer relative">
+        {/* PROFILE */}
+        <div className="flex items-center gap-2">
           <img
-            src={profile} // ✅ sudah langsung pakai state (default dari assets)
-            className="w-10 h-10 rounded-full object-cover border"
+            src={profile}
+            alt="Profile"
+            className="w-10 h-10 rounded-full object-cover"
           />
 
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
+          <div className="text-sm">
+            <p className="font-semibold">
+              John Doe
+            </p>
 
-          <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 hover:opacity-100 flex items-center justify-center text-white text-xs">
-            Edit
+            <p className="text-gray-400 text-xs">
+              Admin
+            </p>
           </div>
-        </label>
+        </div>
+
+        {/* LOGOUT */}
+        <button
+          onClick={handleLogout}
+          className="text-red-500 cursor-pointer hover:bg-red-100 p-2 rounded-full transition"
+        >
+          <LogOut size={20} />
+        </button>
 
       </div>
     </div>
